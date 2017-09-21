@@ -1,0 +1,16 @@
+<configuration scan="true" scanPeriod="60 seconds">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{YYYY-MM-dd HH:mm:ss.SSS} %level tick:%X{tick} inGameTick:%X{inGameTick} [%file.%M\(%line\)]  %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="CONSOLE"/>
+    </appender>
+
+
+    <root level="info">
+        <appender-ref ref="ASYNC_CONSOLE"/>
+    </root>
+</configuration>

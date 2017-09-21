@@ -1,0 +1,29 @@
+plugins {
+    id('java')
+}
+apply plugin: com.github.dbimko.gradle.VersionPlugin
+apply plugin: com.github.dbimko.gradle.JavaPlugin
+
+repositories {
+    jcenter()
+    maven {url = 'https://dl.bintray.com/dbimko/maven'}
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    compile("com.github.dbimko:csgo-demo-protobuf-messages:1.0.0.7")
+
+    compileOnly("org.slf4j:slf4j-api:1.7.25")
+    compileOnly("ch.qos.logback:logback-classic:1.1.3")
+
+    compile("com.google.guava:guava:18.0")
+    compile("com.google.protobuf:protobuf-java:3.3.0")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2'
+}
+

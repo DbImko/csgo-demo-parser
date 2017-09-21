@@ -1,5 +1,8 @@
+
 plugins {
-    id('java')
+    id "java"
+    id "maven-publish"
+    id "com.jfrog.bintray" version "1.7.3"
 }
 apply plugin: com.github.dbimko.gradle.VersionPlugin
 apply plugin: com.github.dbimko.gradle.JavaPlugin
@@ -22,6 +25,48 @@ dependencies {
     compile("com.google.guava:guava:18.0")
     compile("com.google.protobuf:protobuf-java:3.3.0")
 }
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from(sourceSets.main.allSource)
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from(javadoc.destinationDir)
+}
+
+artifacts {
+    archives(sourcesJar, javadocJar)
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+            artifact(sourcesJar)
+            artifact(javadocJar)
+        }
+    }
+}
+
+bintray {
+    user = System.getenv('bintray_user')
+    key = System.getenv('bintray_api_key')
+    publish = true
+    pkg {
+        publications = ['maven']
+        repo = 'maven'
+        userOrg = 'dbimko'
+        name = project.name
+        desc = project.description
+        websiteUrl = 'https://github.com/DbImko/csgo-demo-parser'
+        vcsUrl = 'https://github.com/DbImko/csgo-demo-parser'
+        licenses = ['Apache-2.0']
+        publicDownloadNumbers = true
+    }
+}
+
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.2'
